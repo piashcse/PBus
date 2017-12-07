@@ -1,0 +1,51 @@
+language: android
+
+android:
+  components:
+    - tools
+    - tools
+    - platform-tools
+    - build-tools-25.0.0
+    - android-25
+    - extra-android-m2repository
+    - sys-img-armeabi-v7a-android-14
+    - extra-android-support
+    - extra-google-google_play_services
+    - extra-android-m2repository
+    - extra-google-m2repository
+    - addon-google_apis-google-21
+  licenses:
+    # Check licenses: http://docs.travis-ci.com/user/languages/android/#Dealing-with-Licenses
+    # By default Travis will accept all the licenses, but it's also possible to define a white list:
+    # White list current android-sdk-license revision.
+    # - 'android-sdk-license-5be876d5'
+    # White list all android-sdk-license revisions.
+    # - 'android-sdk-license-.+'
+    # White list all the licenses.
+    - '.+'
+
+jdk:
+  - oraclejdk8
+
+script:
+  - ./gradlew ":$MODULE:install"
+
+after_success:
+  - ./gradlew ":$MODULE:bintrayUpload"
+
+env:
+  matrix:
+    - MODULE=rxbus
+
+branches:
+  except:
+    - gh-pages
+
+notifications:
+  email: false
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.gradle
